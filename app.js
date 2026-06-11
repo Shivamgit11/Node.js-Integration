@@ -1,18 +1,23 @@
 //http, https,fs,path,os
 const http = require("http");
-const express = require('express');
+const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
+app.use(bodyParser.urlencoded());
 
-app.use((req, res, next) => {
-    console.log("In the middleware");
-    next();
-});
-app.use((req, res, next) => {
-    console.log("In the middleware");
-    res.send("<h1>Hello from Express Server</h1>");
+app.use("/add-product", (req, res, next) => {
+  res.send(
+    `<form action="/product"  method="POST" ><input  type="text" name="product" /><button type="submit">submit</button></form>`,
+  );
 });
 
-const server = http.createServer(app);
+app.post("/product", (req, res, next) => {
+  console.log(req.body);
+  res.redirect("/");
+});
+app.use("/", (req, res, next) => {
+  res.send("<h1>Hello from Express Server!</h1>");
+});
 
-server.listen(4000);
+app.listen(3000);
